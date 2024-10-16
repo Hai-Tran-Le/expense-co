@@ -41,20 +41,25 @@ export default function ExpenseComponent({onChangeTotal}) {
         total: 0,
     });
 
-    const format = (value) => 'đ' + Number(value).toLocaleString(); // Ensure it's always a valid number
+    const format = (value) => {
+        if (value === '') return ''; // Handle empty input
+        return 'đ' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
     const parse = (value) => {
         const cleanValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
         return isNaN(cleanValue) ? 0 : parseInt(cleanValue, 10); // Ensure a number is returned
     };
+
     const setExpenseValue = (type, index, value) => {
-        value = Number(value);
+        const parsedValue = parse(value)
         setDisplayData(prevState => ({
                 ...prevState,
-                [type]: value,
+                [type]: parsedValue,
             })
         )
 
-        debounceSetChartData(index, value);
+        debounceSetChartData(index, parsedValue);
     };
 
     useEffect(() => {
@@ -101,7 +106,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <label className='text-sm font-semibold'>Rent: </label>
                     <NumberInput
                         value={format(displayData.rent)}
-                        onChange={(value) => setExpenseValue('rent', 0, parse(value))}
+                        onChange={(value) => setExpenseValue('rent', 0, value)}
                         min={0}
                     >
                         <NumberInputField/>
@@ -115,7 +120,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <label className='text-sm font-semibold'>Food Cost: </label>
                     <NumberInput
                         value={format(displayData.foodCost)}
-                        onChange={(value) => setExpenseValue('foodCost', 1, parse(value))}
+                        onChange={(value) => setExpenseValue('foodCost', 1, value)}
                         min={0}
                     >
                         <NumberInputField/>
@@ -129,7 +134,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <label className='text-sm font-semibold'>Water Bill: </label>
                     <NumberInput
                         value={format(displayData.waterBill)}
-                        onChange={(value) => setExpenseValue('waterBill', 2, parse(value))}
+                        onChange={(value) => setExpenseValue('waterBill', 2, value)}
                         min={0}
                     >
                         <NumberInputField/>
@@ -143,7 +148,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <label className='text-sm font-semibold'>Electricity Bill: </label>
                     <NumberInput
                         value={format(displayData.electricityBill)}
-                        onChange={(value) => setExpenseValue('electricityBill', 3, parse(value))}
+                        onChange={(value) => setExpenseValue('electricityBill', 3, value)}
                         min={0}
                     >
                         <NumberInputField/>
@@ -157,7 +162,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <label className='text-sm font-semibold'>Room Fund: </label>
                     <NumberInput
                         value={format(displayData.roomFund)}
-                        onChange={(value) => setExpenseValue('roomFund', 4, parse(value))}
+                        onChange={(value) => setExpenseValue('roomFund', 4, value)}
                         min={0}
                     >
                         <NumberInputField/>
