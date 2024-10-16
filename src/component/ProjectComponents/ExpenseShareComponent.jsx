@@ -1,6 +1,15 @@
 import {Avatar} from "@chakra-ui/react";
+import {ExclamationCircleIcon} from "@heroicons/react/24/outline/index.js";
 
 export default function ExpenseShareComponent({totalExpense, projectMembers}) {
+    if (!totalExpense) {
+        return (
+            <div className='w-full min-h-[calc(100vh-250px)] flex flex-col justify-center items-center'>
+                <ExclamationCircleIcon className='size-8 text-red-500'></ExclamationCircleIcon>
+                <p className='text-2xl font-bold'>Please input expense first!</p>
+            </div>
+        );
+    }
     const personalExpense = (totalExpense / projectMembers.length).toLocaleString();
     return (
         <div className='px-[100px] py-6 bg-white rounded-[20px]'>

@@ -38,11 +38,14 @@ export default function ExpenseComponent({onChangeTotal}) {
         waterBill: '',
         electricityBill: '',
         roomFund: '',
-        total: '0',
+        total: 0,
     });
 
-    const format = (value) => 'đ' + value.toLocaleString();
-    const parse = (value) => value.replace(/^\đ/, '');
+    const format = (value) => 'đ' + Number(value).toLocaleString(); // Ensure it's always a valid number
+    const parse = (value) => {
+        const cleanValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
+        return isNaN(cleanValue) ? 0 : parseInt(cleanValue, 10); // Ensure a number is returned
+    };
     const setExpenseValue = (type, index, value) => {
         value = Number(value);
         setDisplayData(prevState => ({
@@ -56,17 +59,22 @@ export default function ExpenseComponent({onChangeTotal}) {
 
     useEffect(() => {
         const total =
-            displayData.rent +
-            displayData.foodCost +
-            displayData.waterBill +
-            displayData.electricityBill +
-            displayData.roomFund;
-        setDisplayData(prevState => ({
-            ...prevState,
-            total
-        }));
-        onChangeTotal(total);
-    }, [displayData.electricityBill, displayData.foodCost, displayData.rent, displayData.roomFund, displayData.total, displayData.waterBill, onChangeTotal]);
+            (displayData.rent || 0) +
+            (displayData.foodCost || 0) +
+            (displayData.waterBill || 0) +
+            (displayData.electricityBill || 0) +
+            (displayData.roomFund || 0);
+
+        if (total !== displayData.total) {  // Only update if the total changes
+            setDisplayData(prevState => ({
+                ...prevState,
+                total  // Keep the total as a number
+            }));
+            onChangeTotal(total);
+        }
+    }, [displayData.electricityBill, displayData.foodCost, displayData.rent, displayData.roomFund, displayData.waterBill, onChangeTotal]);
+
+
 
     const debounceSetChartData = useCallback(
         debounce((index, value) => {
@@ -94,7 +102,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <NumberInput
                         value={format(displayData.rent)}
                         onChange={(value) => setExpenseValue('rent', 0, parse(value))}
-                        min={1}
+                        min={0}
                     >
                         <NumberInputField/>
                         <NumberInputStepper>
@@ -108,7 +116,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <NumberInput
                         value={format(displayData.foodCost)}
                         onChange={(value) => setExpenseValue('foodCost', 1, parse(value))}
-                        min={1}
+                        min={0}
                     >
                         <NumberInputField/>
                         <NumberInputStepper>
@@ -122,7 +130,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <NumberInput
                         value={format(displayData.waterBill)}
                         onChange={(value) => setExpenseValue('waterBill', 2, parse(value))}
-                        min={1}
+                        min={0}
                     >
                         <NumberInputField/>
                         <NumberInputStepper>
@@ -136,7 +144,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <NumberInput
                         value={format(displayData.electricityBill)}
                         onChange={(value) => setExpenseValue('electricityBill', 3, parse(value))}
-                        min={1}
+                        min={0}
                     >
                         <NumberInputField/>
                         <NumberInputStepper>
@@ -150,7 +158,7 @@ export default function ExpenseComponent({onChangeTotal}) {
                     <NumberInput
                         value={format(displayData.roomFund)}
                         onChange={(value) => setExpenseValue('roomFund', 4, parse(value))}
-                        min={1}
+                        min={0}
                     >
                         <NumberInputField/>
                         <NumberInputStepper>
@@ -161,11 +169,11 @@ export default function ExpenseComponent({onChangeTotal}) {
                 </div>
                 <div className='flex justify-end gap-4 mt-2'>
                     <label className='text-xl font-semibold'>Total expense:</label>
-                    <p className='text-xl font-semibold'>{displayData.total}đ</p>
+                    <p className='text-xl font-semibold'>{displayData.total.toLocaleString()}đ</p>
                 </div>
             </div>
             <div className='col-span-3 flex justify-center bg-white px-6 py-3 rounded-[20px]'>
-                {displayData.total !== '0' ? (
+                {displayData.total !== 0 ? (
                     <PieChart
                         chartData={chartData}
                         width={400}
