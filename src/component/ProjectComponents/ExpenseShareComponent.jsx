@@ -10,6 +10,19 @@ export default function ExpenseShareComponent({totalExpense, projectMembers}) {
             </div>
         );
     }
+
+    const paymentStatus = (status) => {
+        if (status) {
+            return <div className='flex justify-center items-center bg-green-500 rounded-r-[6px] '>
+                <p className='font-semibold text-white '>Paid!</p>
+            </div>;
+        }
+        return <div className='flex justify-center items-center bg-red-400 rounded-r-[6px] '>
+            <p className='font-semibold text-white '>Unpaid!</p>
+        </div>
+    }
+
+
     const personalExpense = (totalExpense / projectMembers.length).toLocaleString();
     return (
         <div className='px-[100px] py-6 bg-white rounded-[20px]'>
@@ -23,6 +36,7 @@ export default function ExpenseShareComponent({totalExpense, projectMembers}) {
                             ></Avatar>
                             <div>
                                 <p className='font-semibold'>{member.fullName}</p>
+                                <p className='text-sm'>{member.phoneNumber}</p>
                             </div>
                         </div>
                         <div>
@@ -31,9 +45,7 @@ export default function ExpenseShareComponent({totalExpense, projectMembers}) {
                             <div className='col-span-4 px-4 py-1'>
                                 {personalExpense}
                             </div>
-                            <div className='flex justify-center items-center bg-green-500 rounded-r-[6px] '>
-                                <p className='font-semibold text-white '>Paid!</p>
-                            </div>
+                            {paymentStatus(member.isPaid)}
                         </div>
                     </li>
                 ))}

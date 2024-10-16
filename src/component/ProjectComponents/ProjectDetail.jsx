@@ -4,6 +4,7 @@ import {projects} from "../../Data/data.js";
 import {Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import ExpenseComponent from "./ExpenseComponent.jsx";
 import ExpenseShareComponent from "./ExpenseShareComponent.jsx";
+import PaymentHistory from "./PaymentHistory.jsx";
 export default function ProjectDetail() {
     const {projectId} = useParams();
     const [projectData, setProjectData] = useState(null);
@@ -47,7 +48,9 @@ export default function ProjectDetail() {
                             ></ExpenseShareComponent>
                         </TabPanel>
                         <TabPanel>
-                            <p>History</p>
+                            <PaymentHistory
+                            projectData={projectData}
+                            />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

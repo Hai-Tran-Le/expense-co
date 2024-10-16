@@ -30,25 +30,34 @@ const projects = [
         projectMember: [
             {
                 fullName: 'Trần Lê Hà Linh',
+                phoneNumber: '0828021105',
                 isLeader: true,
+                isPaid: false,
             },
             {
                 fullName: 'Nguyễn Ngọc Bảo Hân',
+                phoneNumber: '0901234567',
                 isLeader: false,
+                isPaid: false
             },
             {
                 fullName: 'Đinh Thị Thanh Mai',
+                phoneNumber: '0934567890',
                 isLeader: false,
+                isPaid: true,
             },
             {
                 fullName: 'Nguyễn Diệu Hương',
+                phoneNumber: '0912345678',
                 isLeader: false,
+                isPaid: false
             },
             {
                 fullName: 'Hoàng Hà Anh Thư',
+                phoneNumber: '0956789012',
                 isLeader: false,
+                isPaid: false
             },
-
         ]
     },
     {
@@ -143,8 +152,37 @@ const deadlines = [
     },
 ]
 
+const paymentHistory = [
+    {
+        personName: 'Trần Lê Hà Linh',
+        value: '3000000',
+        date: '16-10-2024'
+    },
+    {
+        personName: 'Nguyễn Ngọc Bảo Hân',
+        value: '2500000',
+        date: '20-9-2024'
+    },
+    {
+        personName: 'Đinh Thị Thanh Mai',
+        value: '3000000',
+        date: '11-10-2024'
+    },
+    {
+        personName: 'Nguyễn Diệu Hương',
+        value: '2500000',
+        date: '21-9-2024'
+    },
+    {
+        personName: 'Hoàng Hà Anh Thư',
+        value: '2500000',
+        date: '18-9-2024'
+    },
+]
+
 export {
     navItems,
     projects,
-    deadlines
+    deadlines,
+    paymentHistory
 }
